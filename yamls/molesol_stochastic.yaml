@@ -1,0 +1,78 @@
+
+# wandb sweep -p Sweep_molesol_stochastic ./yamls/molesol_stochastic.yaml 
+
+program: main.py
+method: grid
+parameters:
+  general__seed:
+    values: [0, 1, 2]
+  general__device:
+    value: 0
+
+# Data
+  data__name:
+    value: "ogbg-molesol"
+  data__bs:
+    value: 32
+  data__num_workers:
+    value: 4
+  data__sampling__keep_subgraph_prob:
+    values: [0.5, 0.2, 0.05]
+  data__sampling__average_res_over:
+    value: 5
+
+# Model
+  model__model_name:
+    values: ["Subgraphormer_PE"]
+  model__num_layer:
+    values: [3, 6, 12]
+  model__dim_embed:
+    values: [60]
+  model__final_dim:
+    value: 1
+  model__dropout:
+    values: [0.3, 0.5]
+  model__attention_type:
+    values: ["Gat"]
+  model__H:
+    values: [4]
+  model__residual:
+    value: True
+  model__sum_pooling:
+    value: False
+  model__layer_encoder__linear:
+    value: True 
+
+# PE
+  model__PE__num_eigen_vectors:
+    values: [1, 2, 8, 16]
+  model__PE__laplacian_type:
+    value: None
+
+# Atom encoder
+  model__atom_encoder__in_dim:
+    value: 0
+  model__atom_encoder__linear:
+    value: False
+
+# Edge encoder
+  model__edge_encoder__in_dim:
+    value: 0
+  model__edge_encoder__use_edge_attr:
+    value: True
+  model__edge_encoder__linear:
+    value: False
+
+# learning
+  training__lr:
+    values: [0.1, 0.01, 0.001]
+  training__wd:
+    value: 0
+  training__epochs:
+    values: [100]
+
+command:
+  - ${env}
+  - ${interpreter}
+  - ${program}
+  - ${args}

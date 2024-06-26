@@ -1,0 +1,56 @@
+general:
+  seed: 1
+  device: 0
+
+data:
+  name: zinc12k # [ogbg-molesol, ogbg-molhiv, zinc , ogbg-molpcba, ogbg-moltox21]
+  bs: 128 # 128
+  num_workers: 4
+
+  preprocess:
+    max_dis: 5
+
+  sampling:
+    keep_subgraph_prob: 1
+    average_res_over: 1 # used only for keep_subgraph_prob < 1
+
+model:
+  model_name: Subgraphormer # [Subgraphormer, Subgraphormer_PE]
+  num_layer: 6
+  dim_embed: 96 
+  final_dim: 1
+  dropout: 0.0
+  attention_type: Gat # [GatV2, Transformer_conv, Gat]
+  H: 4
+  residual: False
+  aggs: ["uL", "vL", "vv"]
+  sum_pooling: True # default is mean
+
+  PE:
+    num_eigen_vectors: 8
+    laplacian_type: none # none stands for L = D - A
+  
+  atom_encoder:
+    in_dim: 6 # Not using this when using lookup table (using this only when using linear)
+    linear: False # if linear is false then uses a lookup table
+
+  edge_encoder:
+    in_dim: 4 # Not using this when using lookup table (using this only when using linear)
+    use_edge_attr: True
+    linear: False # if linear is false then uses a lookup table
+  
+  layer_encoder:
+    linear: True # if linear is false then uses an mlp
+    
+    
+
+training:
+  lr: 0.0005 # 0.001
+  wd: 0 # graphormer used 0.01
+  epochs: 400
+  patience: 40
+
+wandb:
+  project_name: TEST
+
+outdir: result

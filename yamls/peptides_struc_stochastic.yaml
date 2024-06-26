@@ -1,0 +1,80 @@
+
+# wandb sweep -p Sweep_peptides_struc ./yamls/peptides_struc_stochastic.yaml 
+
+
+
+program: main.py
+method: grid
+parameters:
+  general__seed:
+    values: [0, 1, 2]
+  general__device:
+    value: 0
+
+# Data
+  data__name:
+    value: "Peptides-struc"
+  data__bs:
+    value: 128
+  data__num_workers:
+    value: 4
+  data__sampling__keep_subgraph_prob:
+    values: [0.3]
+  data__sampling__average_res_over:
+    value: 3
+
+# Model
+  model__model_name:
+    values: ["Subgraphormer_PE"]
+  model__num_layer:
+    values: [4]
+  model__dim_embed:
+    values: [96]
+  model__final_dim:
+    value: 11
+  model__dropout:
+    value: 0.0
+  model__attention_type:
+    values: ["Gat"]
+  model__H:
+    values: [4]
+  model__residual:
+    value: False
+  model__sum_pooling:
+    value: False
+  model__layer_encoder__linear:
+    value: False 
+
+# PE
+  model__PE__num_eigen_vectors:
+    values: [1,2,8,16]
+  model__PE__laplacian_type:
+    value: None
+
+# Atom encoder
+  model__atom_encoder__in_dim:
+    value: 0
+  model__atom_encoder__linear:
+    value: False
+
+# Edge encoder
+  model__edge_encoder__in_dim:
+    value: 0
+  model__edge_encoder__use_edge_attr:
+    value: False
+  model__edge_encoder__linear:
+    value: False
+
+# learning
+  training__lr:
+    values: [0.005, 0.003, 0.01]
+  training__wd:
+    value: 0
+  training__epochs:
+    values: [200]
+
+command:
+  - ${env}
+  - ${interpreter}
+  - ${program}
+  - ${args}

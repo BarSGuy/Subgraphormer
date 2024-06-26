@@ -1,0 +1,81 @@
+
+# WORKS!
+# wandb sweep -p Sweep_zinc12k ./yamls/zinc12k_deterministic.yaml 
+
+program: main.py
+method: grid
+parameters:
+  general__seed:
+    values: [0, 1, 2]
+  general__device:
+    value: 0
+
+# Data
+  data__name:
+    value: "zinc12k"
+  data__bs:
+    value: 128
+  data__num_workers:
+    value: 4
+  data__sampling__keep_subgraph_prob:
+    value: 1
+  data__sampling__average_res_over:
+    value: 1
+
+# Model
+  model__model_name:
+    values: ["Subgraphormer", "Subgraphormer_PE"]
+  model__num_layer:
+    values: [6]
+  model__dim_embed:
+    values: [96]
+  model__final_dim:
+    value: 1
+  model__dropout:
+    value: 0.0  
+  model__attention_type:
+    values: ["Gat"]
+  model__H:
+    values: [4]
+  model__residual:
+    value: False
+  model__sum_pooling:
+    value: True # False uses mean pooling
+  model__layer_encoder__linear:
+    value: False 
+
+# PE
+  model__PE__num_eigen_vectors:
+    values: [1,2,8,16]
+  model__PE__laplacian_type:
+    value: None
+
+# Atom encoder
+  model__atom_encoder__in_dim:
+    value: 0
+  model__atom_encoder__linear:
+    value: False
+
+# Edge encoder
+  model__edge_encoder__in_dim:
+    value: 0
+  model__edge_encoder__use_edge_attr:
+    value: True
+  model__edge_encoder__linear:
+    value: False
+
+# learning
+  training__lr:
+    values: [0.001, 0.0005, 0.0003, 0.0001]
+  training__wd:
+    value: 0
+  training__epochs:
+    values: [400]
+  training__patience:
+    values: [20]
+
+command:
+  - ${env}
+  - ${interpreter}
+  - ${program}
+  - ${args}
