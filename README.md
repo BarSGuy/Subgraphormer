@@ -59,6 +59,9 @@ To run a hyperparameter sweep, follow the following steps:
     wandb agent <sweep id>
     ```
 
+## Acknowledgements
+Our code is motivated by the code of **[SWL](https://github.com/subgraph23/SWL)**.
+
 ## Credits
 
 For academic citations, please use the following:
